@@ -51,13 +51,14 @@ def WAND_Algo(query_terms, top_k, inverted_index):
                     threshold = min([i[0] for i in Ans])
         else:
             if c_pivot == -1: c_pivot = c_0
-            tmp = candidates
-            for t in range(len(candidates)):
+            print(candidates)
+            c_t = max([i[1] for i in candidates])
+            for t in candidates:
                 print('here', t)
-                print(candidates, len(candidates), [i for i in range(len(candidates))])
-                if candidates[t][1] >c_pivot:break
-                tmp = seek_to_document(tmp, inverted_index, tmp[t][0], c_pivot)
-            candidates = tmp
+                print(c_t, c_pivot)
+                if c_t > c_pivot:break
+                candidates = seek_to_document(candidates, inverted_index, t[0], c_t)
+                if t[0] == pivot: break
         print('after:', candidates)
         print()
 
@@ -92,7 +93,7 @@ def seek_to_document(candidates, inverted_index, term, c_pivot):
             i = j
             break
 
-    print('seek:', candidates[i], term, inverted_index[term])
+    print('seek:', candidates[i], term, inverted_index[term], c_pivot)
     I_t = inverted_index[term]
     for c_t, w_t in I_t:
         if c_pivot < c_t:
