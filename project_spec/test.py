@@ -1,3 +1,4 @@
+import pickle
 from Inv_Index import InvertedIndex
 from project_part1 import WAND_Algo
 
@@ -21,6 +22,7 @@ documents = {1: 'Ink helps drive democracy in Asia The Kyrgyz Republic a small m
              18: 'PlayStation 3 chip to be unveiled Details of the chip designed to power Sony s PlayStation 3 console will be released in San Francisco on Monday Sony IBM and Toshiba who have been working on the Cell ',
              19: 'Intel unveils laser breakthrough Intel has unveiled research that could mean data is soon being moved around chips at the speed of light Scientists at Intel have overcome a fundamental problem that be',
              20: 'Security scares spark browser fix Microsoft is working on a new version of its Internet Explorer web browser The revamp has been prompted by Microsoft s growing concern with security as well as increa'}
+
 ## 1. Construct and get inverted_index
 print('test 1:')
 print('#'*20)
@@ -30,7 +32,6 @@ inverted_index = InvertedIndex(documents).get_inverted_index()
 query_terms = ["the", "Ink"]
 top_k = 3
 
-## 2. WAND algorithm...
 topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
 
 print('Top-k result = ', topk_result)
@@ -40,11 +41,10 @@ print('#'*20)
 print()
 print('test 2:')
 print('#'*20)
-## Test cases
+## Test cases 2
 query_terms = ["Microsoft", "will", "Search"]
 top_k = 2
 
-## 2. WAND algorithm...
 topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
 
 print('Top-k result = ', topk_result)
@@ -54,13 +54,29 @@ print('#'*20)
 print()
 print('test 3')
 print('#'*20)
-## Test cases
+## Test cases 3
 query_terms = ["the", "The", "a", "is"]
 top_k = 3
 
-## 2. WAND algorithm...
 topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
 
 print('Top-k result = ', topk_result)
 print('Evaluation Count = ', full_evaluation_count)
 print('#'*20)
+
+print('#'*20)
+print()
+print('test 4')
+print('#'*20)
+## Test cases 4
+fname = './Data/sample_documents.pickle'
+documents = pickle.load(open(fname,"rb"))
+inverted_index = InvertedIndex(documents).get_inverted_index()
+
+query_terms = ["President","New","York"]
+top_k = 2
+
+topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
+
+print('Top-k result = ', topk_result)
+print('Evaluation Count = ', full_evaluation_count)
