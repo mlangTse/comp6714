@@ -4,6 +4,7 @@ def WAND_Algo(query_terms, top_k, inverted_index):
         U[t] = max([i[1] for i in inverted_index[t]])
         c_t = inverted_index[t][0][0]
         w_t = inverted_index[t][0][1]
+        print(t, inverted_index[t])
         candidates.append([t, c_t, w_t])
 
     threshold = float('-inf')
@@ -12,6 +13,9 @@ def WAND_Algo(query_terms, top_k, inverted_index):
 
     while candidates:
         candidates.sort(key=lambda x : x[1])
+        print('candidates:',candidates)
+        print('query_terms:',query_terms)
+        print('U:', U)
         score_limit = 0
         pivot = None
         for t in candidates:
@@ -22,14 +26,13 @@ def WAND_Algo(query_terms, top_k, inverted_index):
             score_limit = tmp_s_limit
 
         if pivot is None:
-            pivot = query_terms[-1]
+            break
 
         c_0 = candidates[0][1]
-        pivot_index = query_terms.index(pivot)
-        if pivot_index > len(candidates)-1: c_pivot = -1
-        else:
-            c_pivot = DocInfo(candidates, pivot)[0]
+        c_pivot = DocInfo(candidates, pivot)[0]
+        print('c_0', c_0,'c_pivot', c_pivot,'pivot', pivot,'threshold', threshold)
         if c_0 == c_pivot:
+            print("plus one "* 10)
             full_eva_count += 1
             s = 0
             I_update = []
@@ -42,7 +45,9 @@ def WAND_Algo(query_terms, top_k, inverted_index):
 
             for t in I_update:
                 candidates = next_posting(candidates, inverted_index, t)
+                candidates.sort(key=lambda x : x[1])
 
+            print('new' * 5, candidates)
             if s > threshold:
                 Ans.append((s, c_pivot))
                 if len(Ans) > top_k:
@@ -51,21 +56,22 @@ def WAND_Algo(query_terms, top_k, inverted_index):
                     Ans.remove(smallest)
                     threshold = min([i[0] for i in Ans])
         else:
-            if c_pivot == -1: c_pivot = max([i[1] for i in candidates])
             if len(candidates) == 1:
                 candidates = next_posting(candidates, inverted_index, candidates[0][0])
             for t in candidates:
-                if t[0] == pivot or t[1] >= c_pivot: break
+                if t[1] >= c_pivot: break
                 candidates = seek_to_document(candidates, inverted_index, t[0], c_pivot
                 )
+                candidates.sort(key=lambda x : x[1])
+        print('Ans', Ans)
+        print()
 
-    return Ans, full_eva_count
+    return sorted(Ans, key=lambda x : x[0], reverse=True), full_eva_count
 
 def DocInfo(candidates, term):
     for i in candidates:
         if i[0] == term:
             return i[1], i[2]
-    return -1, None
 
 def next_posting(candidates, inverted_index, term):
     i = -1
@@ -89,6 +95,7 @@ def seek_to_document(candidates, inverted_index, term, c_pivot):
         if candidates[j][0] == term:
             i = j
             break
+    print('come on '*10, candidates, term, i)
 
     I_t = inverted_index[term]
     for c_t, w_t in I_t:

@@ -30,6 +30,7 @@ inverted_index = InvertedIndex(documents).get_inverted_index()
 
 ## Test cases 1
 query_terms = ["the", "Ink"]
+print('query terms', query_terms)
 top_k = 3
 
 topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
@@ -43,6 +44,7 @@ print('test 2:')
 print('#'*20)
 ## Test cases 2
 query_terms = ["Microsoft", "will", "Search"]
+print('query terms', query_terms)
 top_k = 2
 
 topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
@@ -56,6 +58,7 @@ print('test 3')
 print('#'*20)
 ## Test cases 3
 query_terms = ["the", "The", "a", "is"]
+print('query terms', query_terms)
 top_k = 3
 
 topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
@@ -64,19 +67,53 @@ print('Top-k result = ', topk_result)
 print('Evaluation Count = ', full_evaluation_count)
 print('#'*20)
 
-print('#'*20)
 print()
 print('test 4')
 print('#'*20)
 ## Test cases 4
 fname = './Data/sample_documents.pickle'
-documents = pickle.load(open(fname,"rb"))
-inverted_index = InvertedIndex(documents).get_inverted_index()
+documents2 = pickle.load(open(fname,"rb"))
+inverted_index = InvertedIndex(documents2).get_inverted_index()
 
 query_terms = ["President","New","York"]
+print('query terms', query_terms)
 top_k = 2
 
 topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
 
 print('Top-k result = ', topk_result)
 print('Evaluation Count = ', full_evaluation_count)
+print('#'*20)
+
+
+print()
+print('test 5')
+print('#'*20)
+## Test cases 5
+inverted_index = InvertedIndex(documents).get_inverted_index()
+
+query_terms = ["the","The","a", 'the']
+print('query terms', query_terms)
+top_k = 3
+
+topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
+
+print('Top-k result = ', topk_result)
+print('Evaluation Count = ', full_evaluation_count)
+print('#'*20)
+
+
+print()
+print('test 6')
+print('#'*20)
+## Test cases 6
+inverted_index = InvertedIndex(documents).get_inverted_index()
+query_terms = ["the","is", 'the']
+print('query terms', query_terms)
+top_k = 3
+
+topk_result, full_evaluation_count = WAND_Algo(query_terms, top_k, inverted_index)
+
+print('Top-k result = ', topk_result)
+print('Evaluation Count = ', full_evaluation_count)
+print('#'*20)
