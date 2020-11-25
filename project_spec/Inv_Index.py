@@ -1,4 +1,4 @@
-from math import log
+from math import log, ceil
 from collections import Counter, defaultdict
 
 class InvertedIndex:
@@ -26,7 +26,7 @@ class InvertedIndex:
         for token in tf_score.keys():
             df = len(tf_score[token])
             for doc_id, tf in tf_score[token]:
-                tfidf_value = (1.0 + log(1.0 + log(tf))) * (1.0 + log(self.ndocs / (1 + df)))
+                tfidf_value = ceil((1.0 + log(1.0 + log(tf)))) * ceil((1.0 + log(self.ndocs / (1 + df))))
                 Posting_dict[token].append((doc_id, tfidf_value))
                 
         for token in tf_score:
